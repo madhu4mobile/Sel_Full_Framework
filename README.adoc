@@ -1,0 +1,13 @@
+= SelPOM_development
+
+== Automation concepts:
+
+=== Bad practices :
+1)
+
+
+=== Good Practices :
+. maven proper project structure in pom.xml
+
+https://maven.apache.org/ref/2.2.1/maven-model/maven.html
+
