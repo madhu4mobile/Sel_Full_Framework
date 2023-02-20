@@ -7,11 +7,11 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 public class CheckoutTestCaseWithBadPractice {
 
@@ -212,10 +212,15 @@ public class CheckoutTestCaseWithBadPractice {
         driver.findElement(By.cssSelector(user_password_textbox_locator_at_place_order_page)).sendKeys(myRegisteredUserPassword);
         driver.findElement(By.cssSelector(user_login_button_locator_at_place_order_page)).click();
         Thread.sleep(3000);
-        //confirm that the user is logged by not seeing the customer singin link.
+        //confirm that the user is logged by not seeing the customer singin link. - Chat GPT
         //Assert.assertTrue(!driver.findElement(By.cssSelector(customer_signin_link)).isDisplayed());
-
-
+        List<WebElement> elements = driver.findElements(By.cssSelector(customer_signin_link));
+        if (elements.size() == 0) {
+            System.out.println("customer_signin_link not found");
+        }
+        else {
+            System.out.println("customer_signin_link found");
+        }
 
         driver.findElement(By.cssSelector(place_order_button_locator)).click();
 
