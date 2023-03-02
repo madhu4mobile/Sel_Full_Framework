@@ -27,21 +27,6 @@ public class TestCasesToRegisterATestUser {
     private String registerUserPasswrodPath = "//input[@id='reg_password']";
     private String registerButtonPath = "//button[@name='register']";
 
-    public String getMyUser() {
-        return myUser;
-    }
-
-    public void setMyUser(String myUser) {
-        this.myUser = myUser;
-    }
-
-    public String getMyUserPassword() {
-        return myUserPassword;
-    }
-
-    public void setMyUserPassword(String myUserPassword) {
-        this.myUserPassword = myUserPassword;
-    }
 
     @Test
     public void registerToCheckIfUserAvailable() {
