@@ -1,3 +1,5 @@
+package org.automation.pom.test;
+
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.PageLoadStrategy;
@@ -23,7 +25,7 @@ import java.util.List;
             Checkout
          */
 
-public class CheckoutTestCaseWithBadPracticeFirstAttempt {
+public class CheckoutTestCaseForPOMTransition {
     //parameters
     //User details for CHECKOUT PAGE hardcoded
     private final String user_first_name = "One";
@@ -36,11 +38,11 @@ public class CheckoutTestCaseWithBadPracticeFirstAttempt {
     private final String user_email = "autotestuser1@askomdch.com";
     private final String successful_payment_message = "Thank you. Your order has been received.";
 
-    public CheckoutTestCaseWithBadPracticeFirstAttempt(){
+    public CheckoutTestCaseForPOMTransition(){
     }
 
     @Test
-    public void guestCheckoutUsingDirectBankTransfer() throws InterruptedException {
+    public void guestCheckoutUsingDirectBankTransferWithPOMModel() throws InterruptedException {
         //Initiation of WebDriverManger with chrome
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -126,17 +128,17 @@ public class CheckoutTestCaseWithBadPracticeFirstAttempt {
     }
 
     @Test
-    public void loginAsUserAndCheckoutUsingDirectBankTransfer() throws InterruptedException, NoSuchFieldException {
+    public void loginAsUserAndCheckoutUsingDirectBankTransferWithPOMModel() throws InterruptedException, NoSuchFieldException {
 
         //in order to get the value of registered user from TestCasesToRegisterATestUser, the object has to be called
-        TestCasesToRegisterATestUser registeredUser = new TestCasesToRegisterATestUser();
-        //Field registeredUserName = registeredUser.getClass().getDeclaredField("myUser");
+        TestCasesToRegisterATestUserForPOMTransition toGetTheRegisteredUser = new TestCasesToRegisterATestUserForPOMTransition();
+//        Field myRegisteredUserName = toGetTheRegisteredUser.getClass().getDeclaredField("myTestUser");
     /*
         these are obtained from getters in TestCasesToRegisterATestUser Class
         as the parameters are private in that class.
     */
-        String myRegisteredUserName = registeredUser.getMyUser();
-        String myRegisteredUserPassword = registeredUser.getMyUserPassword();
+        String myRegisteredTestUserName = toGetTheRegisteredUser.getMyTestUser();
+        String myRegisteredTestUserPassword = toGetTheRegisteredUser.getMyTestUserPassword();
 
         //Initiation of WebDriverManger with chrome
         WebDriverManager.chromedriver().setup();
@@ -193,9 +195,9 @@ public class CheckoutTestCaseWithBadPracticeFirstAttempt {
       */
         driver.findElement(By.cssSelector(".showlogin")).click();
         driver.findElement(By.cssSelector("#username")).clear();
-        driver.findElement(By.cssSelector("#username")).sendKeys(myRegisteredUserName);
+        driver.findElement(By.cssSelector("#username")).sendKeys(myRegisteredTestUserName);
         driver.findElement(By.cssSelector("#password")).clear();
-        driver.findElement(By.cssSelector("#password")).sendKeys(myRegisteredUserPassword);
+        driver.findElement(By.cssSelector("#password")).sendKeys(myRegisteredTestUserPassword);
         driver.findElement(By.cssSelector("button[value='Login']")).click();
         //Now wait for some time.
         WebDriverWait wait_for_login_link = new WebDriverWait(driver, Duration.ofSeconds(15));
