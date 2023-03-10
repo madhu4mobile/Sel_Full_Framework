@@ -1,10 +1,10 @@
 package org.automation.pom.test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.PageLoadStrategy;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.automation.pom.base.BaseTest;
+import org.automation.pom.pages.HomePage;
+import org.automation.pom.pages.StorePage;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -25,7 +25,7 @@ import java.util.List;
             Checkout
          */
 
-public class CheckoutTestCaseForPOMTransition {
+public class CheckoutTestCaseForPOMTransition extends BaseTest {
     //parameters
     //User details for CHECKOUT PAGE hardcoded
     private final String user_first_name = "One";
@@ -43,31 +43,42 @@ public class CheckoutTestCaseForPOMTransition {
 
     @Test
     public void guestCheckoutUsingDirectBankTransferWithPOMModel() throws InterruptedException {
-        //Initiation of WebDriverManger with chrome
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
-        WebDriver driver = new ChromeDriver(chromeOptions);
+        //Driver initalizatin done in BaseTest
+
 
         //Into the application
         driver.get("https://askomdch.com");
-        driver.manage().window().maximize();
+        //Instantiate  HomePage objects
+        HomePage homePage = new HomePage(driver);
 
-        //01 click on store menu link
-        driver.findElement(By.cssSelector("#menu-item-1227 > a")).click();
-        /*
-        validate that you are in products page and ....
-        enter Blue into search filed in products page and click SEARCH button
-        Then wait for 3 seconds for the page to refresh
-        and then assert the Search results: “Blue” is seen.
+        //01 click on store menu link and return StorePage Objects
+        //New is not needed as the return type is already using it in HomePage.
+        //driver.findElement(store_menu_link).click();
+        // Before builder Pattern
+       /*
+            StorePage storePage =  homePage.click_Store_Menu_Link();
+            Assert.assertEquals(driver.getTitle(),"Products – AskOmDch");
+           storePage.enterTextInSearchFiled("Blue");
+           storePage.clickSearchButton();
+           Thread.sleep(3000);
+           Assert.assertEquals(storePage.getSearchFunctionBannerTitle(),"Search results: “Blue”");
+           storePage.clickDesiredProductToCartButton();
         */
+        StorePage storePage =  homePage.click_Store_Menu_Link();
         Assert.assertEquals(driver.getTitle(),"Products – AskOmDch");
-        driver.findElement(By.cssSelector("#woocommerce-product-search-field-0")).sendKeys("Blue");
-        driver.findElement(By.cssSelector("button[value='Search']")).click();
-        Thread.sleep(3000); //inorder for the page to refresh
-        Assert.assertEquals(
-                driver.findElement(By.cssSelector(".woocommerce-products-header__title.page-title")).getText(),
-                "Search results: “Blue”");
+
+        //====>
+        /*
+        //Using functional method in STorePage that does all in one method.
+        //following 4 lines can be commented
+        storePage.enterTextInSearchFiled("Blue").clickSearchButton();
+        Thread.sleep(3000);
+        Assert.assertEquals(storePage.getSearchFunctionBannerTitle(),"Search results: “Blue”");
+        storePage.clickDesiredProductToCartButton();
+        */
+        storePage.seachForAGivenProductWithPartialName("Blue");
+        /*
+
       /*
         now click on add to clart button for the desired product
         and wait 5 second for the ajax call to be updated from server
@@ -75,12 +86,9 @@ public class CheckoutTestCaseForPOMTransition {
         and again wait for 2 seconds for page to load.
         Then validate that you are in CART PAGE by validating the product name "Blue Shoes".
       */
-        driver.findElement(By.cssSelector("a[aria-label='Add “Blue Shoes” to your cart']")).click();
-        Thread.sleep(5000);
-        driver.findElement(By.cssSelector("a[title='View cart']")).click();
-        Thread.sleep(2000);
-        Assert.assertEquals(driver.findElement(By.cssSelector("td[class='product-name'] a")).getText(),"Blue Shoes");
+
       /*
+        Assert that you are on CartPage by asserting the product Name.
         now on CART PAGE, click on PROCEED TO CHECKOUT button
         and again wait for 2 seconds for page to load. ( use implicit wait time )
         Then validate that you are in CHECKOUT PAGE by validating that you can see first name text box by its visibility.
@@ -111,19 +119,25 @@ public class CheckoutTestCaseForPOMTransition {
         driver.findElement(By.cssSelector("#billing_postcode")).sendKeys(user_zipcode);
         driver.findElement(By.cssSelector("#billing_email")).clear();
         driver.findElement(By.cssSelector("#billing_email")).sendKeys(user_email);
-
-        driver.findElement(By.cssSelector("#place_order")).click();
+        // wait for the place_order button is clickable
+        WebDriverWait wait_for_place_order_btn_to_be_clickable = new WebDriverWait(driver, Duration.ofSeconds(30));
+        By element_place_order_button = By.cssSelector("#place_order");
+        WebElement place_order_button = wait_for_place_order_btn_to_be_clickable.until((ExpectedConditions.elementToBeClickable(element_place_order_button)));
+        //driver.manage().timeouts().implicitlyWait(Duration.ofMillis(5000));
+        JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+        jsExecutor.executeScript("arguments[0].click();", place_order_button);
+        //place_order_button.click();
+//        Thread.sleep(2000);
+//        driver.findElement(By.cssSelector("#place_order")).click();
+//        Thread.sleep(2000);
         //Explicit wait ---> https://www.lambdatest.com/blog/expected-conditions-in-selenium-examples/
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+        WebDriverWait wait_for_presense_of_order_number = new WebDriverWait(driver, Duration.ofSeconds(30));
         By elem_order_number = By.cssSelector(".woocommerce-order-overview__order.order");
-        wait.until(ExpectedConditions.presenceOfElementLocated(elem_order_number));
+        wait_for_presense_of_order_number.until(ExpectedConditions.presenceOfElementLocated(elem_order_number));
         // now assert the value of order number is not null and it is integer.
         //-------->https://stackoverflow.com/questions/41589576/asserting-integer-values-in-selenium-webdriver-java
         int order_number_value = Integer.parseInt(driver.findElement(By.cssSelector("li.woocommerce-order-overview__order.order > strong")).getText());
         Assert.assertTrue (order_number_value > 0); // to assert the value is something greater than zero.
-
-        Thread.sleep(3000);
-        driver.quit();
 
     }
 
