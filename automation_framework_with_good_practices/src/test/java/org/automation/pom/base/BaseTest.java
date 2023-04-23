@@ -2,10 +2,7 @@ package org.automation.pom.base;
 
 import org.automation.pom.factory.DriverManager;
 import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
 
 public class BaseTest {
     protected WebDriver driver;
@@ -20,7 +17,7 @@ public class BaseTest {
 
     }
 
-    @AfterMethod
+    @AfterTest
     public void tearDown() throws InterruptedException {
         Thread.sleep(1000);
         driver.quit();
