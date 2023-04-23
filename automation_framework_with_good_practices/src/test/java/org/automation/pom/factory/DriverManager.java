@@ -24,6 +24,7 @@ public class DriverManager {
             //Initiation of WebDriverManger with chrome
             WebDriverManager.chromedriver().setup();
             ChromeOptions chromeOptions = new ChromeOptions();
+            chromeOptions.addArguments("--remote-allow-origins=*");
             chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
             driver = new ChromeDriver(chromeOptions);
         } else if (browser.equalsIgnoreCase("Firefox") || browser.equalsIgnoreCase("ff")){

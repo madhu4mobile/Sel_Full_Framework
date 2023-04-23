@@ -48,9 +48,11 @@ public class TestCasesToRegisterATestUserForPOMTransition {
     @Test
     public void registerToCheckIfUserAvailable() {
 
-        WebDriverManager.chromedriver().setup();
+
         ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--remote-allow-origins=*");
         chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+        WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver(chromeOptions);
 
         //start on the account page

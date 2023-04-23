@@ -14,7 +14,7 @@ public class BaseTest {
     @BeforeTest
     public synchronized void startDriver(@Optional String browser){
         browser = System.getProperty("browser", browser);
-        if(browser == null) browser = "FIREFOX";
+        if(browser == null) browser = "chrome";
         driver = new DriverManager().initializeDriver(browser);
         driver.manage().window().maximize();
 

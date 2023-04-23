@@ -10,8 +10,6 @@ public class HomePage extends BasePage {
     //Locators
     private By store_menu_link = By.cssSelector("#menu-item-1227 > a");
 
-
-
     public HomePage(WebDriver driver) {
         super(driver);
     }

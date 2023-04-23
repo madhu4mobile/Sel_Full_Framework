@@ -2,8 +2,7 @@ package org.automation.pom.test;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.automation.pom.base.BaseTest;
-import org.automation.pom.pages.HomePage;
-import org.automation.pom.pages.StorePage;
+import org.automation.pom.pages.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -36,7 +35,8 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
     //private final String user_state = "Texas"; // Not changing default value.
     private final String user_zipcode = "75001";
     private final String user_email = "autotestuser1@askomdch.com";
-    private final String successful_payment_message = "Thank you. Your order has been received.";
+    private final String checkout_page_order_notes = "automated by Madhu Muppala";
+    //private final String successful_payment_message = "Thank you. Your order has been received.";
 
     public CheckoutTestCaseForPOMTransition(){
     }
@@ -44,7 +44,6 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
     @Test
     public void guestCheckoutUsingDirectBankTransferWithPOMModel() throws InterruptedException {
         //Driver initalizatin done in BaseTest
-
 
         //Into the application
         driver.get("https://askomdch.com");
@@ -76,26 +75,28 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
         Assert.assertEquals(storePage.getSearchFunctionBannerTitle(),"Search results: “Blue”");
         storePage.clickDesiredProductToCartButton();
         */
-        storePage.seachForAGivenProductWithPartialName("Blue");
-        /*
+        CartPage cartPage = storePage.seachForAGivenProductWithPartialName("Blue");
 
       /*
-        now click on add to clart button for the desired product
+        now click on add to cart button for the desired product
         and wait 5 second for the ajax call to be updated from server
         and click on add blue shoes add to cart link
         and again wait for 2 seconds for page to load.
         Then validate that you are in CART PAGE by validating the product name "Blue Shoes".
       */
 
-      /*
+      /*   CART page
         Assert that you are on CartPage by asserting the product Name.
         now on CART PAGE, click on PROCEED TO CHECKOUT button
         and again wait for 2 seconds for page to load. ( use implicit wait time )
         Then validate that you are in CHECKOUT PAGE by validating that you can see first name text box by its visibility.
       */
-        driver.findElement(By.cssSelector(".checkout-button.button.alt.wc-forward")).click();
+        Assert.assertEquals(cartPage.getProductName(),"Blue Shoes");
+        CheckoutPage checkoutPage = cartPage.clickCheckoutButton();
+
+        //driver.findElement().click();   - Modernized
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(2000)); //https://testsigma.com/blog/selenium-wait-for-page-to-load/
-        Assert.assertNotNull(driver.findElement(By.cssSelector("input[id='billing_first_name']")));
+
 
        /*
         now on CHECKOUT PAGE, enter details of the user. ( stick to madatory fileds for now )
@@ -107,7 +108,13 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
                     .until(ExpectedConditions.elementToBeClickable(By.xpath(“//a/h1”)));
         Then validate that you are in CHECKOUT PAGE by validating that you can see ORDER NUMBER text.
       */
-        driver.findElement(By.cssSelector("input[id='billing_first_name']")).clear();
+        Assert.assertNotNull(driver.findElement(By.cssSelector("input[id='billing_first_name']")));
+
+        OrderConfirmationPage orderConfirmationPage = checkoutPage.enter_biller_details_and_click_PlaceOrder_Button(user_first_name,user_last_name,
+                user_street_address, user_city, user_zipcode,user_email, checkout_page_order_notes);
+        orderConfirmationPage.confirm_order_recieved();
+
+/*        driver.findElement(By.cssSelector("input[id='billing_first_name']")).clear();
         driver.findElement(By.cssSelector("input[id='billing_first_name']")).sendKeys(user_first_name);
         driver.findElement(By.cssSelector("#billing_last_name")).clear();
         driver.findElement(By.cssSelector("#billing_last_name")).sendKeys(user_last_name);
@@ -137,7 +144,7 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
         // now assert the value of order number is not null and it is integer.
         //-------->https://stackoverflow.com/questions/41589576/asserting-integer-values-in-selenium-webdriver-java
         int order_number_value = Integer.parseInt(driver.findElement(By.cssSelector("li.woocommerce-order-overview__order.order > strong")).getText());
-        Assert.assertTrue (order_number_value > 0); // to assert the value is something greater than zero.
+        Assert.assertTrue (order_number_value > 0); // to assert the value is something greater than zero.*/
 
     }
 
@@ -157,6 +164,7 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
         //Initiation of WebDriverManger with chrome
         WebDriverManager.chromedriver().setup();
         ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--remote-allow-origins=*");
         chromeOptions.setPageLoadStrategy(PageLoadStrategy.NORMAL);
         WebDriver driver = new ChromeDriver(chromeOptions);
 
