@@ -26,7 +26,13 @@ public class CheckoutPage extends BasePage {
     private final By biller_ZIPCode_txtBox = By.cssSelector("#billing_postcode");
     private final By biller_EmailAddress_txtBox = By.cssSelector("#billing_email");
 
-    private final By biller_OrderNotes_txtBox = By.cssSelector("#order_comments");
+    //Login link elements
+        private final By login_link =  By.cssSelector(".showlogin");
+        private final By login_username_txtBox = By.cssSelector("#username");
+        private final By login_password_txtBox = By.cssSelector("#password");
+        private final By login_button =  By.cssSelector("button[value='Login']");
+
+        private final By biller_OrderNotes_txtBox = By.cssSelector("#order_comments");
 
 //    Handled in the click_PlaceOrder_btn()
 //    private final By billing_PlaceOrder_btn = By.cssSelector("#place_order");
@@ -93,20 +99,40 @@ public class CheckoutPage extends BasePage {
         return this;
     }
 
+    public CheckoutPage click_Login_Link(){
+        driver.findElement(login_link).click();
+        return this;
+    }
+    public CheckoutPage enter_Login_username(String loginUserName){
+        driver.findElement(login_username_txtBox).clear();
+        driver.findElement(login_username_txtBox).sendKeys(loginUserName);
+        return this;
+    }
+    public CheckoutPage enter_Login_password(String loginPassword){
+        driver.findElement(login_password_txtBox).clear();
+        driver.findElement(login_password_txtBox).sendKeys(loginPassword);
+        return this;
+    }
+    public CheckoutPage click_Login_button(){
+        driver.findElement(login_button).click();
+        return this;
+    }
+
     public CheckoutPage chickHereToLoginLink(String myRegisteredTestUserName, String myRegisteredTestUserPassword){
-        driver.findElement(By.cssSelector(".showlogin")).click();
-        driver.findElement(By.cssSelector("#username")).clear();
-        driver.findElement(By.cssSelector("#username")).sendKeys(myRegisteredTestUserName);
-        driver.findElement(By.cssSelector("#password")).clear();
-        driver.findElement(By.cssSelector("#password")).sendKeys(myRegisteredTestUserPassword);
-        driver.findElement(By.cssSelector("button[value='Login']")).click();
-        //Now wait for some time.
+
+
+            //builder pattern to handle the customer login scenario
+                click_Login_Link()
+                .enter_Login_username(myRegisteredTestUserName)
+                .enter_Login_password(myRegisteredTestUserPassword)
+                .click_Login_button();
+
+        //Validation for login : Now wait for some time.
         WebDriverWait wait_for_login_link = new WebDriverWait(driver, Duration.ofSeconds(15));
-        By link_to_login = By.cssSelector(".showlogin");
-        wait_for_login_link.until(ExpectedConditions.invisibilityOfElementLocated(link_to_login));
+        wait_for_login_link.until(ExpectedConditions.invisibilityOfElementLocated(login_link));
         //Now to validate that the click on login link is not visible anymore after a wait time.
-        List<WebElement> login_link_elements = driver.findElements(By.cssSelector(".showlogin"));
-        if (login_link_elements.size() == 0 ) {
+        List<WebElement> customer_signin_link  = driver.findElements(login_link);
+        if (customer_signin_link.size() == 0 ) {
             System.out.println("customer_signin_link not found - Which means the login is successful !!");
         } else {
             System.out.println("customer_signin_link found");
