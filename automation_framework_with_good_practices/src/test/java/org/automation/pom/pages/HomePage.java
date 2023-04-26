@@ -15,7 +15,7 @@ public class HomePage extends BasePage {
     }
 
     //Action Methods
-    public StorePage click_Store_Menu_Link(){
+    public StorePage navigateToStoreUsingMenuLink(){
         driver.findElement(store_menu_link).click();
         return new StorePage(driver);
     }

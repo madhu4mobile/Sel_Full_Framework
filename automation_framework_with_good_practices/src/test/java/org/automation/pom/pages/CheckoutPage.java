@@ -9,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class CheckoutPage extends BasePage {
     //User details for CHECKOUT PAGE hardcoded
@@ -39,40 +40,40 @@ public class CheckoutPage extends BasePage {
 
     //methods
 
-    public CheckoutPage enter_FirstName(String user_first_name){
+    private CheckoutPage enter_FirstName(String user_first_name){
         driver.findElement(biller_firstName_txtBox).clear();
         driver.findElement(biller_firstName_txtBox).sendKeys(user_first_name);
         return this;
     }
 
-    public CheckoutPage enter_LastName(String user_last_name){
+    private CheckoutPage enter_LastName(String user_last_name){
         driver.findElement(biller_lastName_txtBox).clear();
         driver.findElement(biller_lastName_txtBox).sendKeys(user_last_name);
         return this;
     }
-    public CheckoutPage enter_StreetAddress(String user_street_address){
+    private CheckoutPage enter_StreetAddress(String user_street_address){
         driver.findElement(biller_StreetName_txtBox).clear();
         driver.findElement(biller_StreetName_txtBox).sendKeys(user_street_address);
         return this;
     }
 
-    public CheckoutPage enter_City(String user_city){
+    private CheckoutPage enter_City(String user_city){
         driver.findElement(biller_City_txtBox).clear();
         driver.findElement(biller_City_txtBox).sendKeys(user_city);
         return this;
     }
-    public CheckoutPage enter_ZipCode(String user_zipcode){
+    private CheckoutPage enter_ZipCode(String user_zipcode){
         driver.findElement(biller_ZIPCode_txtBox).clear();
         driver.findElement(biller_ZIPCode_txtBox).sendKeys(user_zipcode);
         return this;
     }
 
-    public CheckoutPage enter_EmailAddress(String user_email){
+    private CheckoutPage enter_EmailAddress(String user_email){
         driver.findElement(biller_EmailAddress_txtBox).clear();
         driver.findElement(biller_EmailAddress_txtBox).sendKeys(user_email);
         return this;
     }
-    public CheckoutPage enter_OrderNotes(String billing_order_notes){
+    private CheckoutPage enter_OrderNotes(String billing_order_notes){
         driver.findElement(biller_OrderNotes_txtBox).clear();
         driver.findElement(biller_OrderNotes_txtBox).sendKeys(checkout_page_order_notes);
         return this;
@@ -91,6 +92,28 @@ public class CheckoutPage extends BasePage {
 
         return this;
     }
+
+    public CheckoutPage chickHereToLoginLink(String myRegisteredTestUserName, String myRegisteredTestUserPassword){
+        driver.findElement(By.cssSelector(".showlogin")).click();
+        driver.findElement(By.cssSelector("#username")).clear();
+        driver.findElement(By.cssSelector("#username")).sendKeys(myRegisteredTestUserName);
+        driver.findElement(By.cssSelector("#password")).clear();
+        driver.findElement(By.cssSelector("#password")).sendKeys(myRegisteredTestUserPassword);
+        driver.findElement(By.cssSelector("button[value='Login']")).click();
+        //Now wait for some time.
+        WebDriverWait wait_for_login_link = new WebDriverWait(driver, Duration.ofSeconds(15));
+        By link_to_login = By.cssSelector(".showlogin");
+        wait_for_login_link.until(ExpectedConditions.invisibilityOfElementLocated(link_to_login));
+        //Now to validate that the click on login link is not visible anymore after a wait time.
+        List<WebElement> login_link_elements = driver.findElements(By.cssSelector(".showlogin"));
+        if (login_link_elements.size() == 0 ) {
+            System.out.println("customer_signin_link not found - Which means the login is successful !!");
+        } else {
+            System.out.println("customer_signin_link found");
+        }
+        return this;
+    }
+
     public OrderConfirmationPage enter_biller_details_and_click_PlaceOrder_Button(String user_first_name, String user_last_name,
                                                                                   String user_street_address, String user_city, String user_zipcode,
                                                                                   String user_email, String checkout_page_order_notes){

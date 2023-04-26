@@ -6,13 +6,11 @@ import org.automation.pom.pages.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.lang.reflect.Field;
 import java.time.Duration;
 import java.util.List;
 
@@ -63,7 +61,7 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
            Assert.assertEquals(storePage.getSearchFunctionBannerTitle(),"Search results: “Blue”");
            storePage.clickDesiredProductToCartButton();
         */
-        StorePage storePage =  homePage.click_Store_Menu_Link();
+        StorePage storePage =  homePage.navigateToStoreUsingMenuLink();
         Assert.assertEquals(driver.getTitle(),"Products – AskOmDch");
 
         //====>

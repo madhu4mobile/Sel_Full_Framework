@@ -11,8 +11,6 @@ public class CartPage extends BasePage {
 
 
 
-    By mytext = By.cssSelector("input[id='billing_first_name']");
-
     public CartPage(WebDriver driver) {
         super(driver);
     }
