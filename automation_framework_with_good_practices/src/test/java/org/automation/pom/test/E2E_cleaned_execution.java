@@ -40,9 +40,9 @@ public class E2E_cleaned_execution extends BaseTest {
     @Test(priority = 1)
     public void guestCheckoutUsingDirectBankTransferWithPOMModel() throws InterruptedException {
         //Into the application
-        driver.get("https://askomdch.com");
+        //driver.get("https://askomdch.com");
         //Instantiate  HomePage objects
-        HomePage homePage = new HomePage(driver);
+        HomePage homePage = new HomePage(driver).loadHomePage();
 
         //01 click on store menu link and return StorePage Objects
         StorePage storePage =  homePage.navigateToStoreUsingMenuLink();
@@ -64,8 +64,10 @@ public class E2E_cleaned_execution extends BaseTest {
     public void loginAsUserAndCheckoutUsingDirectBankTransferWithPOMModel() throws InterruptedException, NoSuchFieldException {
 
         //Into the application
-        driver.get("https://askomdch.com");
-        driver.manage().window().maximize();
+        //driver.get("https://askomdch.com");
+        //driver.manage().window().maximize();
+        // Navigation
+        HomePage homePage = new HomePage(driver).loadHomePage();
 
         //in order to get the value of registered user from TestCasesToRegisterATestUser, the object has to be called
         TestCasesToRegisterATestUserForPOMTransition toGetTheRegisteredUser = new TestCasesToRegisterATestUserForPOMTransition();
@@ -80,7 +82,7 @@ public class E2E_cleaned_execution extends BaseTest {
         System.out.println("myRegisteredTestUserName = " + myRegisteredTestUserName);
 
         // Navigation
-        HomePage homePage = new HomePage(driver);
+        //HomePage homePage = new HomePage(driver);
 
         //01 click on store menu link and return StorePage Objects
         StorePage storePage =  homePage.navigateToStoreUsingMenuLink();

@@ -14,10 +14,9 @@ public class BaseTest {
         if(browser == null) browser = "chrome";
         driver = new DriverManager().initializeDriver(browser);
         driver.manage().window().maximize();
-
     }
 
-    @AfterTest
+    @AfterSuite
     public void tearDown() throws InterruptedException {
         Thread.sleep(1000);
         driver.quit();

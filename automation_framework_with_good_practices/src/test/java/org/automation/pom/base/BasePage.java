@@ -9,4 +9,9 @@ public class BasePage {
     public BasePage(WebDriver driver){
         this.driver=driver;
     }
+
+    public BasePage loadUrl(String endpoint){
+        driver.get("https://askomdch.com"+ endpoint);
+        return this;
+    }
 }
