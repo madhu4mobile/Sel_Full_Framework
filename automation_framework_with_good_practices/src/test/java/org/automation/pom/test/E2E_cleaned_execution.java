@@ -1,6 +1,7 @@
 package org.automation.pom.test;
 
 import org.automation.pom.base.BaseTest;
+import org.automation.pom.objects.BillingAddress;
 import org.automation.pom.pages.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -21,6 +22,8 @@ import java.util.List;
          */
 
 public class E2E_cleaned_execution extends BaseTest {
+ ;
+
     //parameters
     //User details for CHECKOUT PAGE hardcoded
     private final String user_first_name = "One";
@@ -33,6 +36,19 @@ public class E2E_cleaned_execution extends BaseTest {
     private final String user_email = "autotestuser1@askomdch.com";
     private final String checkout_page_order_notes = "automated by Madhu Muppala";
     //private final String successful_payment_message = "Thank you. Your order has been received.";
+
+    /*//one way of setting billing object values
+    BillingAddress billingAddress = new BillingAddress()
+            .setFirstname(user_first_name)
+            .setLastname(user_last_name)
+            .setStreetaddress(user_street_address)
+            .setCity(user_city)
+            .setEmail(user_email)
+            .setZipcode(user_zipcode)
+            .setPageOrderNotes(checkout_page_order_notes);*/
+    // The other way of setting
+    BillingAddress billingAddress = new BillingAddress(user_first_name,user_last_name,user_street_address,user_city,user_zipcode,user_email,checkout_page_order_notes);
+
 
     public E2E_cleaned_execution(){
     }

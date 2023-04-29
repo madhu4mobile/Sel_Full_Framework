@@ -1,6 +1,7 @@
 package org.automation.pom.pages;
 
 import org.automation.pom.base.BasePage;
+import org.automation.pom.objects.BillingAddress;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +14,7 @@ import java.util.List;
 
 public class CheckoutPage extends BasePage {
     //User details for CHECKOUT PAGE hardcoded
+    BillingAddress billingAddress = new BillingAddress();
 
     private final String checkout_page_order_notes = "automated by Madhu Muppala";
 
@@ -138,6 +140,16 @@ public class CheckoutPage extends BasePage {
             System.out.println("customer_signin_link found");
         }
         return this;
+    }
+
+    public CheckoutPage setBillingAddress(BillingAddress billingAddress){
+        return enter_FirstName(billingAddress.getFirstname()).
+                enter_LastName(billingAddress.getLastname()).
+                enter_StreetAddress(billingAddress.getStreetaddress()).
+                enter_City(billingAddress.getCity()).
+                enter_ZipCode(billingAddress.getZipcode()).
+                enter_EmailAddress(billingAddress.getEmail()).
+                enter_OrderNotes(billingAddress.getPageOrderNotes());
     }
 
     public OrderConfirmationPage enter_biller_details_and_click_PlaceOrder_Button(String user_first_name, String user_last_name,
