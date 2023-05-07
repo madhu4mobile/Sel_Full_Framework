@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import java.time.Duration;
 import java.util.List;
@@ -27,6 +28,14 @@ public class CheckoutPage extends BasePage {
     private final By biller_City_txtBox = By.cssSelector("#billing_city");
     private final By biller_ZIPCode_txtBox = By.cssSelector("#billing_postcode");
     private final By biller_EmailAddress_txtBox = By.cssSelector("#billing_email");
+
+    //parameters
+
+    String confirmationPage_messge = "Thank you. Your order has been received.";
+
+
+    private final By thankYou_message_text_element = By.cssSelector(".woocommerce-thankyou-order-received");
+    private final By order_number_value_element = By.cssSelector("li.woocommerce-order-overview__order.order > strong");
 
     //Login link elements
         private final By login_link =  By.cssSelector(".showlogin");
@@ -143,16 +152,18 @@ public class CheckoutPage extends BasePage {
     }
 
     public CheckoutPage setBillingAddress(BillingAddress billingAddress){
-        return enter_FirstName(billingAddress.getFirstname()).
+          enter_FirstName(billingAddress.getFirstname()).
                 enter_LastName(billingAddress.getLastname()).
                 enter_StreetAddress(billingAddress.getStreetaddress()).
                 enter_City(billingAddress.getCity()).
                 enter_ZipCode(billingAddress.getZipcode()).
                 enter_EmailAddress(billingAddress.getEmail()).
                 enter_OrderNotes(billingAddress.getPageOrderNotes());
+        click_PlaceOrder_btn();
+        return  this;
     }
 
-    public OrderConfirmationPage enter_biller_details_and_click_PlaceOrder_Button(String user_first_name, String user_last_name,
+    public CheckoutPage enter_biller_details_and_click_PlaceOrder_Button(String user_first_name, String user_last_name,
                                                                                   String user_street_address, String user_city, String user_zipcode,
                                                                                   String user_email, String checkout_page_order_notes){
         enter_FirstName(user_first_name);
@@ -165,7 +176,26 @@ public class CheckoutPage extends BasePage {
 
         click_PlaceOrder_btn();
 
-        return new OrderConfirmationPage(driver);
+        return this;
     }
+
+    public CheckoutPage confirm_order_recieved(){
+        WebDriverWait wait_for_presense_of_order_number = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        wait_for_presense_of_order_number.until(ExpectedConditions.presenceOfElementLocated(order_number_value_element));
+        // now assert the value of order number is not null and it is integer.
+        //-------->https://stackoverflow.com/questions/41589576/asserting-integer-values-in-selenium-webdriver-java
+        int order_number_value = Integer.parseInt(driver.findElement(order_number_value_element).getText());
+
+        System.out.println("order_number_value = " + order_number_value);
+
+
+        //Assertions for the order is successful
+        Assert.assertEquals(driver.findElement(thankYou_message_text_element).getText(),confirmationPage_messge);
+        Assert.assertTrue (order_number_value > 0); // to assert the value is something greater than zero.
+
+        return this;
+    }
+
 
 }

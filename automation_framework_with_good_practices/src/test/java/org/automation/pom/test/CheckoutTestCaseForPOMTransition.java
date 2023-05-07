@@ -108,9 +108,9 @@ public class CheckoutTestCaseForPOMTransition extends BaseTest {
       */
         Assert.assertNotNull(driver.findElement(By.cssSelector("input[id='billing_first_name']")));
 
-        OrderConfirmationPage orderConfirmationPage = checkoutPage.enter_biller_details_and_click_PlaceOrder_Button(user_first_name,user_last_name,
+        checkoutPage.enter_biller_details_and_click_PlaceOrder_Button(user_first_name,user_last_name,
                 user_street_address, user_city, user_zipcode,user_email, checkout_page_order_notes);
-        orderConfirmationPage.confirm_order_recieved();
+        checkoutPage.confirm_order_recieved();
 
 /*        driver.findElement(By.cssSelector("input[id='billing_first_name']")).clear();
         driver.findElement(By.cssSelector("input[id='billing_first_name']")).sendKeys(user_first_name);
