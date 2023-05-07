@@ -28,7 +28,7 @@ public class E2E_cleaned_execution extends BaseTest {
 
     //parameters
     //User details for CHECKOUT PAGE hardcoded
-/*    private  String user_first_name = "One";
+    private  String user_first_name = "One";
     private  String user_last_name = "AutoUser";
     //private final String user_country = "United States (US)";  // Not changing default value.
     private  String user_street_address = "203 Farns Avenue";
@@ -36,16 +36,8 @@ public class E2E_cleaned_execution extends BaseTest {
     //private final String user_state = "Texas"; // Not changing default value.
     private  String user_zipcode = "75001";
     private  String user_email = "autotestuser1@askomdch.com";
-    private  String checkout_page_order_notes = "automated by Madhu Muppala";*/
-    private  String user_first_name ;
-    private  String user_last_name ;
-    //private final String user_country = "United States (US)";  // Not changing default value.
-    private  String user_street_address  ;
-    private  String user_city  ;
-    //private final String user_state = "Texas"; // Not changing default value.
-    private  String user_zipcode  ;
-    private  String user_email  ;
-    private  String checkout_page_order_notes ;
+    private  String checkout_page_order_notes = "automated by Madhu Muppala";
+
     //private final String successful_payment_message = "Thank you. Your order has been received.";
 
     /*//one way of setting billing object values
